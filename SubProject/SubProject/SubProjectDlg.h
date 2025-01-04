@@ -33,6 +33,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButtonMakecircle();
+	afx_msg void OnBnClickedButtonLoadcircle();
+
 	void UpdateDisplay(int nOffsetX = 0, int nOffsetY = 50);
 	void UpdateDisplayWithDelay(int nTime, int nOffsetX = 0, int nOffsetY = 50);
 	void DrawCircle(int nY, int nX, unsigned char nColor, int nRadius);

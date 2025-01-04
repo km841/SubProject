@@ -73,6 +73,7 @@ BEGIN_MESSAGE_MAP(CSubProjectDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BUTTON_MAKECIRCLE, &CSubProjectDlg::OnBnClickedButtonMakecircle)
+	ON_BN_CLICKED(IDC_BUTTON_LOADCIRCLE, &CSubProjectDlg::OnBnClickedButtonLoadcircle)
 END_MESSAGE_MAP()
 
 
@@ -253,7 +254,7 @@ void CSubProjectDlg::Save(CString strFileName)
 	
 	do
 	{
-		ResultPath = CheckPath.wstring() + _T("_") + std::to_wstring(nSuffixNum) + _T(".jpg");
+		ResultPath = CheckPath.wstring() + _T("_") + std::to_wstring(nSuffixNum) + _T(".bmp");
 		nSuffixNum++;
 	} while (fs::exists(ResultPath));
 
@@ -262,6 +263,9 @@ void CSubProjectDlg::Save(CString strFileName)
 
 void CSubProjectDlg::Load(CString strFileName)
 {
+	if (!m_Image.IsNull())
+		m_Image.Destroy();
+	
 	m_Image.Load(strFileName);
 
 	if (m_Image.IsNull())
@@ -304,4 +308,63 @@ void CSubProjectDlg::UpdateDisplayWithDelay(int nTime, int nOffsetX, int nOffset
 {
 	Sleep(nTime);
 	UpdateDisplay(nOffsetX, nOffsetY);
+}
+
+
+void CSubProjectDlg::OnBnClickedButtonLoadcircle()
+{
+	CFileDialog FDialog(TRUE, _T("jpg"), nullptr,
+		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+		_T("이미지 파일 (*.jpg;*.jpeg;*.bmp)|*.jpg;*.jpeg;*.bmp|모든 파일 (*.*)|*.*||"));
+
+	if (FDialog.DoModal() != IDOK)
+		return;
+
+	std::cout << "로드 전 : " << m_Image.GetPitch() << ", " << m_Image.GetHeight() << std::endl;
+	Load(FDialog.GetPathName());
+	std::cout << "로드 후 : " << m_Image.GetPitch() << ", " << m_Image.GetHeight() << std::endl;
+	
+	int nSumX = 0;
+	int nSumY = 0;
+	int nCount = 0;
+
+	unsigned char* p = (unsigned char*)m_Image.GetBits();
+	int nPitch = m_Image.GetPitch();
+
+	for (int y = 0; y < m_Image.GetHeight(); ++y)
+	{
+		for (int x = 0; x < m_Image.GetWidth(); ++x)
+		{
+			if (p[y * nPitch + x] > 0x00)
+			{
+				nSumX += x;
+				nSumY += y;
+				nCount++;
+			}
+		}
+	}
+
+	double dCenterX = (double)nSumX / nCount;
+	double dCenterY = (double)nSumY / nCount;
+
+	UpdateDisplay();
+
+	CClientDC dc(this);
+
+	LOGBRUSH lbr;
+	lbr.lbStyle = BS_SOLID;
+	lbr.lbColor = RGB(255, 0, 0);
+	lbr.lbHatch = 0;
+
+	CPen DotPen(PS_GEOMETRIC | PS_DOT, 3, &lbr, 0, 0);
+	CPen* OldPen = dc.SelectObject(&DotPen);
+
+	dc.MoveTo(dCenterX, YOFFSET);
+	dc.LineTo(dCenterX, dCenterY + YOFFSET);
+
+	dc.MoveTo(0, dCenterY + YOFFSET);
+	dc.LineTo(dCenterX, dCenterY + YOFFSET);
+
+	dc.SelectObject(OldPen);
+	Invalidate(false);
 }

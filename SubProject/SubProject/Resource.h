@@ -9,7 +9,7 @@
 #define IDR_MAINFRAME                   128
 #define IDC_BUTTON_MAKECIRCLE           1000
 #define IDC_EDIT_INPUTNUM               1001
-#define IDC_BUTTON_MAKECIRCLE2          1002
+#define IDC_BUTTON_LOADCIRCLE           1002
 #define IDC_EDIT2                       1003
 #define IDC_STATIC_LOAD                 1004
 #define IDC_STATIC_TIMES                1005
