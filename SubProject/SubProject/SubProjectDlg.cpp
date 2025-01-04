@@ -7,12 +7,18 @@
 #include "SubProject.h"
 #include "SubProjectDlg.h"
 #include "afxdialogex.h"
+#include <thread>
+#include <filesystem>
+#include <string>
+#include <iostream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
 #define YOFFSET 50
+
+namespace fs = std::filesystem;
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
@@ -115,6 +121,7 @@ BOOL CSubProjectDlg::OnInitDialog()
 		return FALSE;
 
 	pEditBox->SetWindowText(TEXT("0"));
+	Initialize();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -168,11 +175,28 @@ HCURSOR CSubProjectDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void ThreadProcess(CWnd* pParent, int nTimes)
+{
+	CSubProjectDlg* pDialog = (CSubProjectDlg*)pParent;
 
+	for (int i = 0; i < nTimes; ++i)
+	{
+		int nRandX = rand() % pDialog->m_nWidth;
+		int nRandY = rand() % pDialog->m_nHeight + YOFFSET;
+		int nRandRadius = rand() % 100;
+
+		pDialog->DrawCircle(nRandY, nRandX, 0xff, nRandRadius);
+		pDialog->UpdateDisplayWithDelay(10);
+		pDialog->Save(CString("Image"));
+		if (i+1 != nTimes)
+			pDialog->DrawCircle(nRandY, nRandX, 0x00, nRandRadius);
+	}
+}
 
 void CSubProjectDlg::OnBnClickedButtonMakecircle()
 {
 	Initialize();
+
 	CEdit* pEditBox = (CEdit*)GetDlgItem(IDC_EDIT_INPUTNUM);
 	if (pEditBox == nullptr)
 		return;
@@ -181,12 +205,8 @@ void CSubProjectDlg::OnBnClickedButtonMakecircle()
 	pEditBox->GetWindowText(strValue);
 	int nTimes = _ttoi(strValue);
 
-	for (int i = 0; i < nTimes; ++i)
-	{
-		int nRandX = rand() % m_nWidth;
-		int nRandY = rand() % m_nHeight;
-		DrawCircle(nRandY, nRandX);
-	}
+	std::thread Thread(ThreadProcess, this, nTimes);
+	Thread.detach();
 
 	UpdateDisplay();
 }
@@ -214,32 +234,74 @@ void CSubProjectDlg::Initialize()
 	}
 }
 
-void CSubProjectDlg::DrawCircle(int nY, int nX)
+void CSubProjectDlg::Save(CString strFileName)
+{
+	if (m_Image.IsNull())
+	{
+		AfxMessageBox(_T("m_Image가 NULL 입니다."));
+		return;
+	}
+
+	fs::path CurrentPath = fs::current_path();
+	fs::path ImageFolderPath = CurrentPath / "Image";
+	if (!fs::exists(ImageFolderPath))
+		fs::create_directory(ImageFolderPath);
+	
+	fs::path CheckPath = ImageFolderPath / std::wstring(strFileName);
+	fs::path ResultPath;
+	int nSuffixNum = 0;
+	
+	do
+	{
+		ResultPath = CheckPath.wstring() + _T("_") + std::to_wstring(nSuffixNum) + _T(".jpg");
+		nSuffixNum++;
+	} while (fs::exists(ResultPath));
+
+	m_Image.Save(ResultPath.c_str());
+}
+
+void CSubProjectDlg::Load(CString strFileName)
+{
+	m_Image.Load(strFileName);
+
+	if (m_Image.IsNull())
+	{
+		AfxMessageBox(_T("m_Image를 제대로 불러오지 못했습니다."));
+		return;
+	}
+}
+
+void CSubProjectDlg::DrawCircle(int nY, int nX, unsigned char nColor, int nRadius)
 {
 	unsigned char* p = (unsigned char*)m_Image.GetBits();
 	int nPitch = m_Image.GetPitch();
-	int nRadius = 10;
 
 	for (int y = nY - nRadius; y < nY + nRadius; ++y)
 	{
 		for (int x = nX - nRadius; x < nX + nRadius; ++x)
 		{
-			if (y < 0 || y > m_nHeight || x < 0 || x > m_nWidth)
+			if (y < 0 || y >= m_nHeight || x < 0 || x >= m_nWidth)
 				continue;
 
-			int distX = x - nX;
-			int distY = y - nY;
-			int dist = distX * distX + distY * distY;
-			if (dist < nRadius * nRadius)
+			int nDistX = x - nX;
+			int nDistY = y - nY;
+			int nDist = nDistX * nDistX + nDistY * nDistY;
+			if (nDist < nRadius * nRadius)
 			{
-				p[y * nPitch + x] = 0xff;
+				p[y * nPitch + x] = nColor;
 			}
 		}
 	}
 }
 
-void CSubProjectDlg::UpdateDisplay(int OffsetX, int OffsetY)
+void CSubProjectDlg::UpdateDisplay(int nOffsetX, int nOffsetY)
 {
 	CClientDC dc(this);
-	m_Image.Draw(dc, OffsetX, OffsetY);
+	m_Image.Draw(dc, nOffsetX, nOffsetY);
+}
+
+void CSubProjectDlg::UpdateDisplayWithDelay(int nTime, int nOffsetX, int nOffsetY)
+{
+	Sleep(nTime);
+	UpdateDisplay(nOffsetX, nOffsetY);
 }

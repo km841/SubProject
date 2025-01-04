@@ -1,17 +1,13 @@
 ﻿
 // SubProjectDlg.h: 헤더 파일
 //
-
 #pragma once
-
-
 // CSubProjectDlg 대화 상자
 class CSubProjectDlg : public CDialogEx
 {
 private:
 	CImage m_Image;
-	int m_nWidth;
-	int m_nHeight;
+
 // 생성입니다.
 public:
 	CSubProjectDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
@@ -28,9 +24,7 @@ public:
 // 구현입니다.
 protected:
 	HICON m_hIcon;
-	void Initialize();
-	void DrawCircle(int nY, int nX);
-
+	
 	// 생성된 메시지 맵 함수
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
@@ -39,5 +33,12 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedButtonMakecircle();
-	void UpdateDisplay(int OffsetX = 0, int OffsetY = 50);
+	void UpdateDisplay(int nOffsetX = 0, int nOffsetY = 50);
+	void UpdateDisplayWithDelay(int nTime, int nOffsetX = 0, int nOffsetY = 50);
+	void DrawCircle(int nY, int nX, unsigned char nColor, int nRadius);
+	void Initialize();
+	void Save(CString strFileName);
+	void Load(CString strFileName);
+	int m_nWidth;
+	int m_nHeight;
 };
