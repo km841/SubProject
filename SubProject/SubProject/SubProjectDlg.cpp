@@ -12,6 +12,7 @@
 #define new DEBUG_NEW
 #endif
 
+#define YOFFSET 50
 
 // 응용 프로그램 정보에 사용되는 CAboutDlg 대화 상자입니다.
 
@@ -65,6 +66,7 @@ BEGIN_MESSAGE_MAP(CSubProjectDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(IDC_BUTTON_MAKECIRCLE, &CSubProjectDlg::OnBnClickedButtonMakecircle)
 END_MESSAGE_MAP()
 
 
@@ -100,6 +102,19 @@ BOOL CSubProjectDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+
+	srand((unsigned int)time(NULL));
+
+	CRect ClientRect;
+	GetClientRect(&ClientRect);
+	m_nWidth = ClientRect.Width();
+	m_nHeight = ClientRect.Height() - YOFFSET;
+
+	CEdit* pEditBox = (CEdit*)GetDlgItem(IDC_EDIT_INPUTNUM);
+	if (pEditBox == nullptr)
+		return FALSE;
+
+	pEditBox->SetWindowText(TEXT("0"));
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
@@ -153,3 +168,78 @@ HCURSOR CSubProjectDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+
+
+void CSubProjectDlg::OnBnClickedButtonMakecircle()
+{
+	Initialize();
+	CEdit* pEditBox = (CEdit*)GetDlgItem(IDC_EDIT_INPUTNUM);
+	if (pEditBox == nullptr)
+		return;
+
+	CString strValue;
+	pEditBox->GetWindowText(strValue);
+	int nTimes = _ttoi(strValue);
+
+	for (int i = 0; i < nTimes; ++i)
+	{
+		int nRandX = rand() % m_nWidth;
+		int nRandY = rand() % m_nHeight;
+		DrawCircle(nRandY, nRandX);
+	}
+
+	UpdateDisplay();
+}
+
+void CSubProjectDlg::Initialize()
+{
+	int nBitsPerPixel = 8;
+
+	if (m_Image != NULL)
+	{
+		m_Image.Destroy();
+	}
+
+	m_Image.Create(m_nWidth, m_nHeight, nBitsPerPixel);
+	unsigned char* p = (unsigned char*)m_Image.GetBits();
+
+	if (nBitsPerPixel == 8)
+	{
+		static RGBQUAD rgb[256];
+		for (int i = 0; i < 256; ++i)
+		{
+			rgb[i].rgbRed = rgb[i].rgbGreen = rgb[i].rgbBlue = i;
+		}
+		m_Image.SetColorTable(0, 256, rgb);
+	}
+}
+
+void CSubProjectDlg::DrawCircle(int nY, int nX)
+{
+	unsigned char* p = (unsigned char*)m_Image.GetBits();
+	int nPitch = m_Image.GetPitch();
+	int nRadius = 10;
+
+	for (int y = nY - nRadius; y < nY + nRadius; ++y)
+	{
+		for (int x = nX - nRadius; x < nX + nRadius; ++x)
+		{
+			if (y < 0 || y > m_nHeight || x < 0 || x > m_nWidth)
+				continue;
+
+			int distX = x - nX;
+			int distY = y - nY;
+			int dist = distX * distX + distY * distY;
+			if (dist < nRadius * nRadius)
+			{
+				p[y * nPitch + x] = 0xff;
+			}
+		}
+	}
+}
+
+void CSubProjectDlg::UpdateDisplay(int OffsetX, int OffsetY)
+{
+	CClientDC dc(this);
+	m_Image.Draw(dc, OffsetX, OffsetY);
+}

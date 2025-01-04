@@ -1,0 +1,4 @@
+﻿  SubProjectDlg.cpp
+SubProject.obj : warning LNK4258: '/entry:WinMainCRTStartup' 지시문은 '/ENTRY:wWinMainCRTStartup' 스위치와 호환되지 않습니다. 무시됩니다.
+SubProjectDlg.obj : warning LNK4258: '/entry:WinMainCRTStartup' 지시문은 '/ENTRY:wWinMainCRTStartup' 스위치와 호환되지 않습니다. 무시됩니다.
+  SubProject.vcxproj -> C:\Assignment\SubProject\x64\Debug\SubProject.exe
