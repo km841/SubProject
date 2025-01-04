@@ -13,3 +13,7 @@
 - Image 저장 구현 및 실행 중 Freezing 되지 않도록 기능을 Thread로 분리</br>
 ![화면 캡처 2025-01-05 003822](https://github.com/user-attachments/assets/f36fb35e-c621-44bc-9191-2d654907b397)</br>
 ![bandicam2025-01-0500-41-13-693-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/e6107aa5-a052-4a40-a975-4e35f7249460)
+
+### 02:50</br>
+- 저장된 이미지를 불러온 후 중심점 구하기</br>
+![bandicam2025-01-0502-46-55-285-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/01639eb7-afe9-4f77-88ef-9e64d3a437fb)
