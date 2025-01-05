@@ -43,4 +43,7 @@ public:
 	void Load(CString strFileName);
 	int m_nWidth;
 	int m_nHeight;
+	CDC* m_MainDC;
+	CDC m_BackBufDC;
+	CBitmap   m_BackBufBit;
 };

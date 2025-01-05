@@ -59,6 +59,9 @@ END_MESSAGE_MAP()
 
 CSubProjectDlg::CSubProjectDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_SUBPROJECT_DIALOG, pParent)
+	, m_MainDC()
+	, m_BackBufBit()
+	, m_BackBufDC()
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -116,6 +119,11 @@ BOOL CSubProjectDlg::OnInitDialog()
 	GetClientRect(&ClientRect);
 	m_nWidth = ClientRect.Width();
 	m_nHeight = ClientRect.Height() - YOFFSET;
+
+	m_MainDC = GetDC();
+	m_BackBufDC.CreateCompatibleDC(m_MainDC);
+	m_BackBufBit.CreateCompatibleBitmap(m_MainDC, m_nWidth, m_nHeight);
+	m_BackBufDC.SelectObject(m_BackBufBit);
 
 	CEdit* pEditBox = (CEdit*)GetDlgItem(IDC_EDIT_INPUTNUM);
 	if (pEditBox == nullptr)
@@ -300,8 +308,8 @@ void CSubProjectDlg::DrawCircle(int nY, int nX, unsigned char nColor, int nRadiu
 
 void CSubProjectDlg::UpdateDisplay(int nOffsetX, int nOffsetY)
 {
-	CClientDC dc(this);
-	m_Image.Draw(dc, nOffsetX, nOffsetY);
+	m_Image.Draw(m_BackBufDC, nOffsetX, nOffsetY);
+	m_MainDC->BitBlt(0, YOFFSET, m_nWidth, m_nHeight, &m_BackBufDC, 0, 0, SRCCOPY);
 }
 
 void CSubProjectDlg::UpdateDisplayWithDelay(int nTime, int nOffsetX, int nOffsetY)
@@ -320,10 +328,7 @@ void CSubProjectDlg::OnBnClickedButtonLoadcircle()
 	if (FDialog.DoModal() != IDOK)
 		return;
 
-	std::cout << "로드 전 : " << m_Image.GetPitch() << ", " << m_Image.GetHeight() << std::endl;
 	Load(FDialog.GetPathName());
-	std::cout << "로드 후 : " << m_Image.GetPitch() << ", " << m_Image.GetHeight() << std::endl;
-	
 	int nSumX = 0;
 	int nSumY = 0;
 	int nCount = 0;
