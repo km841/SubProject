@@ -17,3 +17,11 @@
 ### 02:50</br>
 - 저장된 이미지를 불러온 후 중심점 구하기</br>
 ![bandicam2025-01-0502-46-55-285-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/01639eb7-afe9-4f77-88ef-9e64d3a437fb)
+
+## 25-01-06</br>
+### 02:57</br>
+- 도형 생성 및 이동 구현</br>
+- 도형 불러온 후 원의 중심좌표에 X 그리기</br>
+- 도형 좌표 계산 (반지름을 이용한 텍스트 위치 계산)</br>
+- 더블 버퍼링 구현</br>
+![bandicam2025-01-0602-55-42-329-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/79f6f617-fd15-44ba-8259-19eb4a40f2ed)</br>
