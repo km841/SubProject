@@ -25,3 +25,11 @@
 - 도형 좌표 계산 (반지름을 이용한 텍스트 위치 계산)</br>
 - 더블 버퍼링 구현</br>
 ![bandicam2025-01-0602-55-42-329-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/79f6f617-fd15-44ba-8259-19eb4a40f2ed)</br>
+
+## 25-01-07</br>
+### 02:40</br>
+- 세 점을 이용하여 원 그리기 구현</br>
+- 기능을 bool 변수인 bDotMode로 구분하여 bDotMode일 경우 점을 이용한 원 그리기 기능 활성화</br>
+- 비활성화 상태일 경우 Draw, Action, Load 기능 활성화</br>
+- 코드 정리 및 마무리</br>
+![bandicam2025-01-0702-39-20-625-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/49f32381-7744-462d-b388-e3414c46aba5)</br>
