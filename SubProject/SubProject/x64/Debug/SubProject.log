@@ -1,28 +1,62 @@
-﻿  SubProject.cpp
-  SubProjectDlg.cpp
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(223,12): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(224,12): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(242,23): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(243,23): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(383,49): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(383,17): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(384,49): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(384,17): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(386,49): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(386,17): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(387,49): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(387,17): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(394,65): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(394,31): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(425,39): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(425,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(428,39): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(428,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(431,38): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(431,28): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(441,21): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(441,14): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
+﻿  SubProjectDlg.cpp
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(239,12): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(240,12): warning C4244: '초기화 중': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(258,23): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(259,23): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(263,31): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(393,14): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(395,15): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(400,16): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(401,16): warning C4244: '초기화 중': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(491,49): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(491,17): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(492,49): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(492,17): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(494,49): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(494,17): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(495,49): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(495,17): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(502,65): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(502,31): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(537,39): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(537,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(540,39): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(540,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(543,38): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(543,28): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(556,21): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(556,14): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(597,42): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(602,68): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(602,38): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(607,33): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(612,41): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(617,67): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(617,37): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\type_traits(1762,98): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\thread(55,14): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::invoke<void(__cdecl *)(CWnd *,const CVector2 &,const CVector2 &,int),CSubProjectDlg*,CVector2,CVector2,float>(_Callable &&,_Ty1 &&,CVector2 &&,CVector2 &&,float &&) noexcept(false)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Callable=void (__cdecl *)(CWnd *,const CVector2 &,const CVector2 &,int),
+              _Ty1=CSubProjectDlg *
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\thread(62,17): message : 컴파일되는 함수 템플릿 인스턴스화 'unsigned int std::thread::_Invoke<_Tuple,0,1,2,3,4>(void *) noexcept'에 대한 참조를 확인하세요.
+          with
+          [
+              _Tuple=_Tuple
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\thread(71,40): message : 컴파일되는 함수 템플릿 인스턴스화 'unsigned int (__cdecl *std::thread::_Get_invoke<_Tuple,0,1,2,3,4>(std::integer_sequence<size_t,0,1,2,3,4>) noexcept)(void *) noexcept'에 대한 참조를 확인하세요.
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\include\thread(88,9): message : 컴파일되는 함수 템플릿 인스턴스화 'void std::thread::_Start<void(__cdecl &)(CWnd *,const CVector2 &,const CVector2 &,int),_Ty,CVector2&,CVector2&,float&>(_Fn,_Ty &&,CVector2 &,CVector2 &,float &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Ty=CSubProjectDlg *,
+              _Fn=void (__cdecl &)(CWnd *,const CVector2 &,const CVector2 &,int)
+          ]
+C:\Assignment\SubProject\SubProject\SubProjectDlg.cpp(558,20): message : 컴파일되는 함수 템플릿 인스턴스화 'std::thread::thread<void(__cdecl &)(CWnd *,const CVector2 &,const CVector2 &,int),CSubProjectDlg*,CVector2&,CVector2&,float&,0>(_Fn,CSubProjectDlg *&&,CVector2 &,CVector2 &,float &)'에 대한 참조를 확인하세요.
+          with
+          [
+              _Fn=void (__cdecl &)(CWnd *,const CVector2 &,const CVector2 &,int)
+          ]
 SubProject.obj : warning LNK4258: '/entry:WinMainCRTStartup' 지시문은 '/ENTRY:wWinMainCRTStartup' 스위치와 호환되지 않습니다. 무시됩니다.
 SubProjectDlg.obj : warning LNK4258: '/entry:WinMainCRTStartup' 지시문은 '/ENTRY:wWinMainCRTStartup' 스위치와 호환되지 않습니다. 무시됩니다.
   SubProject.vcxproj -> C:\Assignment\SubProject\x64\Debug\SubProject.exe

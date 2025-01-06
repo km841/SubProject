@@ -2,59 +2,15 @@
 // SubProjectDlg.h: 헤더 파일
 //
 #pragma once
+#include "MathLib.h"
+#include "CDot.h"
+#include <vector>
 
-struct CVector2
-{
-	float x = 0.0f;
-	float y = 0.0f;
-
-	CVector2(float x, float y)
-		: x(x), y(y)
-	{}
-
-	CVector2()
-		: x(0.0f), y(0.0f)
-	{}
-
-	CVector2 operator/(float value)
-	{
-		return CVector2(x / value, y / value);
-	}
-
-	CVector2& operator+=(const CVector2& other)
-	{
-		x += other.x;
-		y += other.y;
-		return *this;
-	}
-
-	CVector2& operator/=(float value)
-	{
-		x /= value;
-		y /= value;
-		return *this;
-	}
-
-	CVector2 operator-(const CVector2& other)
-	{
-		return CVector2(x - other.x, y - other.y);
-	}
-
-	CVector2 operator-(const CVector2& other) const
-	{
-		return CVector2(x - other.x, y - other.y);
-	}
-
-	static CVector2 CPointToVector2(const CPoint& cp)
-	{
-		return CVector2((float)cp.x, (float)cp.y);
-	}
-};
 
 struct CCircleInfo
 {
-	CVector2 cp;
-	int nRadius;
+	CVector2 Center;
+	float fRadius;
 };
 
 
@@ -67,6 +23,7 @@ private:
 // 생성입니다.
 public:
 	CSubProjectDlg(CWnd* pParent = nullptr);	// 표준 생성자입니다.
+	~CSubProjectDlg();
 
 // 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
@@ -91,22 +48,35 @@ public:
 	afx_msg void OnBnClickedButtonLoadcircle();
 	afx_msg void OnBnClickedButtonDraw();
 	afx_msg void OnBnClickedButtonAction();
+	afx_msg void OnBnClickedButtonThreedot();
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 
-	void UpdateDisplay(int nOffsetX = 0, int nOffsetY = 0);
+	void RenderImage(int nOffsetX = 0, int nOffsetY = 0);
 	void UpdateDisplayWithDelay(int nTime, int nOffsetX = 0, int nOffsetY = 0);
+	void RenderMainDC();
 	void DrawCircle(int nY, int nX, unsigned char nColor, int nRadius);
 	void Initialize();
 	CCircleInfo CalcCenterPointOfShape();
 	void Save(CString strFileName);
 	void Load(CString strFileName);
-	int GetValueFromEditBox(int nID);
-	void SetValueToEditBox(int nID, int nValue);
-	void SetValueToEditBox(int nID, CString strValue);
+	int GetValueFromControl(int nID);
+	void SetValueToControl(int nID, int nValue);
+	void SetValueToControl(int nID, CString strValue);
+	CDot* AddDot(const CVector2& Pos, const CVector2& Size = CVector2(2.0f, 2.0f));
+	void DeleteFrontDot();
+	bool CalcCircle(const CVector2& P1, const CVector2& P2, const CVector2& P3, CVector2& Center, float& fRadius);
+	CCircleInfo DrawCircleFromDots(int nThickness, int nColor);
 
 	int m_nWidth;
 	int m_nHeight;
 	int m_nRandRadius;
 	CDC* m_MainDC;
 	CDC m_BackBufDC;
+	CVector2 m_MousePos;
 	CBitmap   m_BackBufBit;
+	bool m_bDotMode;
+	
+	std::vector<CDot*> m_Dots;
 };

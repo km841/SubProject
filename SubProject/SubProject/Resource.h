@@ -20,6 +20,7 @@
 #define IDC_EDIT_END_X                  1009
 #define IDC_EDIT_END_Y                  1010
 #define IDC_BUTTON_ACTION               1011
+#define IDC_BUTTON_THREEDOT             1012
 
 // Next default values for new objects
 // 
