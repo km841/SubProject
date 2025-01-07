@@ -40,7 +40,6 @@
 - 초기화 버튼을 통한 초기 상태로 되돌리기 및 랜덤 이동 버튼 클릭 시 별도 Thread를 이용하여 3개 점 생성 및 원 생성</br>
 ![bandicam2025-01-0801-27-37-016-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/e20c3c59-8c12-43c8-8df1-3ddd673f4ffe)</br>
 
-## 25-01-08</br>
 ### 04:09</br>
 - 프로그래머스 과제 완료</br>
 ![화면 캡처 2025-01-08 040919](https://github.com/user-attachments/assets/b6c6347f-21df-4e3c-953e-b9fca2715d76)</br>
