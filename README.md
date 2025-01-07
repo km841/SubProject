@@ -33,3 +33,9 @@
 - 비활성화 상태일 경우 Draw, Action, Load 기능 활성화</br>
 - 코드 정리 및 마무리</br>
 ![bandicam2025-01-0702-39-20-625-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/49f32381-7744-462d-b388-e3414c46aba5)</br>
+
+## 25-01-08</br>
+### 01:25</br>
+- 세 점을 이용한 원 그리기 이후, 각 점을 드래그해서 원 재정의</br>
+- 초기화 버튼을 통한 초기 상태로 되돌리기 및 랜덤 이동 버튼 클릭 시 별도 Thread를 이용하여 3개 점 생성 및 원 생성</br>
+![bandicam2025-01-0801-27-37-016-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/e20c3c59-8c12-43c8-8df1-3ddd673f4ffe)</br>
