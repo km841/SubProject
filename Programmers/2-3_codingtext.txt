@@ -1,0 +1,61 @@
+#include <string>
+#include <vector>
+#include <map>
+
+using namespace std;
+const int DICE_TRY_MAX = 7;
+const int DICE_NUM_MAX = 4;
+
+int board[DICE_TRY_MAX];
+int arrTmp[DICE_NUM_MAX];
+int arrCnt[DICE_NUM_MAX];
+
+int solution(int a, int b, int c, int d) {
+    int answer = 0;
+    
+    for (int dice : {a, b, c, d})
+        board[dice]++;
+    
+    int nPos = 0;
+    for (int i = 1; i < DICE_TRY_MAX; ++i)
+    {
+        if (board[i] > 0)
+        {
+            arrTmp[nPos] = i;
+            arrCnt[nPos] = board[i];
+            nPos++;
+        }
+    }
+    
+    if (nPos == 4)
+        answer = min(min(min(a, b), c), d);
+    
+    else if (nPos == 3)
+    {
+        answer = 1;
+        for (int i = 0; i < DICE_NUM_MAX - 1; ++i)
+        {
+            if (arrCnt[i] == 2)
+                continue;
+            
+            answer *= arrTmp[i];
+        }
+    }
+    
+    else if (nPos == 2)
+    {
+        if (arrCnt[0] == arrCnt[1])
+            answer = (arrTmp[0] + arrTmp[1]) * abs(arrTmp[0] - arrTmp[1]);
+        else
+        {
+            int nPIndex = arrCnt[0] == 3 ? arrTmp[0] : arrTmp[1];
+            int nOtherIndex = nPIndex == arrTmp[0] ? arrTmp[1] : arrTmp[0];
+            
+            answer = (nPIndex * 10 + nOtherIndex) * (nPIndex * 10 + nOtherIndex); 
+        }
+    }
+    else
+        answer = 1111 * a;
+ 
+    return answer;
+}

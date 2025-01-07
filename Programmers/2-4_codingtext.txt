@@ -1,0 +1,35 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+struct CVector2
+{
+    int x, y;
+    CVector2(int x, int y)
+        : x(x), y(y)
+    {}
+
+    int Cross(const CVector2& Other) const
+    {
+        return x * Other.y - y * Other.x;
+    }
+};
+
+int solution(vector<vector<int>> dots) {
+    
+    CVector2 v1(dots[0][0], dots[0][1]);
+    CVector2 v2(dots[1][0], dots[1][1]);
+    CVector2 v3(dots[2][0], dots[2][1]);
+    CVector2 v4(dots[3][0], dots[3][1]);
+    
+    CVector2 v1Tov2(v2.x - v1.x, v2.y - v1.y);
+    CVector2 v3Tov4(v4.x - v3.x, v4.y - v3.y);
+    CVector2 v1Tov3(v3.x - v1.x, v3.y - v1.y);
+    CVector2 v2Tov4(v4.x - v2.x, v4.y - v2.y);  
+    
+    if (v1Tov2.Cross(v3Tov4) == 0 || v1Tov3.Cross(v2Tov4) == 0)
+        return 1;
+    
+    return 0;
+}
