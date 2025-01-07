@@ -3,15 +3,15 @@
 
 CDot::CDot()
 	: m_Pos{}
-	, m_Size{}
+	, m_fRadius(2.0f)
 	, m_nDepth(0)
 	, m_nColor(0)
 {
 }
 
-CDot::CDot(const CVector2& Pos, const CVector2& Size)
+CDot::CDot(const CVector2& Pos, float fRadius)
 	: m_Pos(Pos)
-	, m_Size(Size)
+	, m_fRadius(fRadius)
 	, m_nDepth(0)
 	, m_nColor(0)
 {
@@ -19,10 +19,10 @@ CDot::CDot(const CVector2& Pos, const CVector2& Size)
 
 bool CDot::IsHovered(const CVector2& MousePos)
 {
-	if (MousePos.x > m_Pos.x - m_Size.x / 2 &&
-		MousePos.x < m_Pos.x + m_Size.x / 2 &&
-		MousePos.y > m_Pos.y - m_Size.y / 2 &&
-		MousePos.y < m_Pos.y + m_Size.y / 2)
+	CVector2 Diff = MousePos - m_Pos;
+	float fLen = Diff.Length();
+
+	if (fLen <= m_fRadius)
 		return true;
 	else
 		return false;
@@ -43,15 +43,20 @@ void CDot::Draw(CImage& InImage, int nMaxWidth, int nMaxHeight, int nColor)
 	unsigned char* p = (unsigned char*)InImage.GetBits();
 	int nPitch = InImage.GetPitch();
 
-	for (int y = m_Pos.y - m_Size.y / 2; y < m_Pos.y + m_Size.y / 2; ++y)
+	for (int y = m_Pos.y - m_fRadius; y < m_Pos.y + m_fRadius; ++y)
 	{
-		for (int x = m_Pos.x - m_Size.x / 2; x < m_Pos.x + m_Size.x / 2; ++x)
+		for (int x = m_Pos.x - m_fRadius; x < m_Pos.x + m_fRadius; ++x)
 		{
 			if (y < 0 || y >= nMaxHeight || x < 0 || x >= nMaxWidth)
 				continue;
 
-			p[y * nPitch + x] = nColor;
-			
+			int nDistX = x - m_Pos.x;
+			int nDistY = y - m_Pos.y;
+			int nDist = nDistX * nDistX + nDistY * nDistY;
+			if (nDist < m_fRadius * m_fRadius)
+			{
+				p[y * nPitch + x] = nColor;
+			}
 		}
 	}
 }

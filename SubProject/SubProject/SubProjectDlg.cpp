@@ -16,7 +16,7 @@
 #define new DEBUG_NEW
 #endif
 
-#define YOFFSET 80
+#define YOFFSET 50
 
 namespace fs = std::filesystem;
 
@@ -63,7 +63,9 @@ CSubProjectDlg::CSubProjectDlg(CWnd* pParent /*=nullptr*/)
 	, m_BackBufBit()
 	, m_BackBufDC()
 	, m_nRandRadius(0)
-	, m_bDotMode(false)
+	, m_bInitialized(false)
+	, m_bRandomMovePlaying(false)
+	, m_pClickedDot(nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -91,10 +93,8 @@ BEGIN_MESSAGE_MAP(CSubProjectDlg, CDialogEx)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
-	ON_BN_CLICKED(IDC_BUTTON_LOADCIRCLE, &CSubProjectDlg::OnBnClickedButtonLoadcircle)
-	ON_BN_CLICKED(IDC_BUTTON_DRAW, &CSubProjectDlg::OnBnClickedButtonDraw)
-	ON_BN_CLICKED(IDC_BUTTON_ACTION, &CSubProjectDlg::OnBnClickedButtonAction)
-	ON_BN_CLICKED(IDC_BUTTON_THREEDOT, &CSubProjectDlg::OnBnClickedButtonThreedot)
+	ON_BN_CLICKED(IDC_BUTTON_CLEAR, &CSubProjectDlg::OnBnClickedButtonClear)
+	ON_BN_CLICKED(IDC_BUTTON_RANDOM, &CSubProjectDlg::OnBnClickedButtonRandom)
 END_MESSAGE_MAP()
 
 
@@ -143,11 +143,6 @@ BOOL CSubProjectDlg::OnInitDialog()
 	m_BackBufBit.CreateCompatibleBitmap(m_MainDC, m_nWidth, m_nHeight + YOFFSET);
 	m_BackBufDC.SelectObject(m_BackBufBit);
 
-	SetValueToControl(IDC_EDIT_INPUTNUM, 0);
-	SetValueToControl(IDC_EDIT_START_X, 0);
-	SetValueToControl(IDC_EDIT_START_Y, 0);
-	SetValueToControl(IDC_EDIT_END_X, 0);
-	SetValueToControl(IDC_EDIT_END_Y, 0);
 	Initialize();
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
@@ -172,6 +167,14 @@ void CSubProjectDlg::OnSysCommand(UINT nID, LPARAM lParam)
 
 void CSubProjectDlg::OnPaint()
 {
+	if (!m_bInitialized)
+	{
+		RenderImage();
+		RenderMainDC();
+		m_bInitialized = true;
+	}
+
+
 	if (IsIconic())
 	{
 		CPaintDC dc(this); // 그리기를 위한 디바이스 컨텍스트입니다.
@@ -206,7 +209,7 @@ void CSubProjectDlg::Initialize()
 {
 	int nBitsPerPixel = 8;
 
-	if (m_Image != NULL)
+	if (!m_Image.IsNull())
 	{
 		m_Image.Destroy();
 	}
@@ -334,9 +337,9 @@ void CSubProjectDlg::SetValueToControl(int nID, CString strValue)
 	pEditBox->SetWindowText(strValue);
 }
 
-CDot* CSubProjectDlg::AddDot(const CVector2& Pos, const CVector2& Size)
+CDot* CSubProjectDlg::AddDot(const CVector2& Pos, float fRadius)
 {
-	CDot* pDot = new CDot{ Pos, Size };
+	CDot* pDot = new CDot{ Pos, fRadius };
 	m_Dots.push_back(pDot);
 
 	pDot->SetColor(0x0000ff);
@@ -348,12 +351,18 @@ CDot* CSubProjectDlg::AddDot(const CVector2& Pos, const CVector2& Size)
 	return pDot;
 }
 
-void CSubProjectDlg::DeleteFrontDot()
+void CSubProjectDlg::ClearDots()
 {
-	auto p = m_Dots.begin();
-	delete *p;
+	for (int i = 0; i < m_Dots.size(); ++i)
+	{
+		if (m_Dots[i])
+		{
+			m_Dots[i]->Draw(m_Image, m_nWidth, m_nHeight, 0x00);
+			delete m_Dots[i];
+		}
+	}
 
-	m_Dots.erase(m_Dots.begin());
+	m_Dots.clear();
 }
 
 bool CSubProjectDlg::CalcCircle(const CVector2& P1, const CVector2& P2, const CVector2& P3, CVector2& Center, float& fRadius)
@@ -417,6 +426,14 @@ CCircleInfo CSubProjectDlg::DrawCircleFromDots(int nThickness, int nColor)
 	return CCircleInfo{ CVector2{}, 0.0f };
 }
 
+void CSubProjectDlg::DrawDots(int nColor)
+{
+	for (int i = 0; i < m_Dots.size(); ++i)
+	{
+		m_Dots[i]->Draw(m_Image, m_nWidth, m_nHeight, nColor);
+	}
+}
+
 void CSubProjectDlg::DrawCircle(int nY, int nX, unsigned char nColor, int nRadius)
 {
 	unsigned char* p = (unsigned char*)m_Image.GetBits();
@@ -457,69 +474,6 @@ void CSubProjectDlg::RenderMainDC()
 	m_MainDC->BitBlt(0, YOFFSET, m_nWidth, m_nHeight + YOFFSET, &m_BackBufDC, 0, 0, SRCCOPY);
 }
 
-void CSubProjectDlg::OnBnClickedButtonLoadcircle()
-{
-	if (m_bDotMode)
-		return;
-
-	Invalidate();
-	CFileDialog FDialog(TRUE, _T("jpg"), nullptr,
-		OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-		_T("이미지 파일 (*.jpg;*.jpeg;*.bmp)|*.jpg;*.jpeg;*.bmp|모든 파일 (*.*)|*.*||"));
-
-	if (FDialog.DoModal() != IDOK)
-		return;
-
-	Load(FDialog.GetPathName());
-
-	CCircleInfo ci = CalcCenterPointOfShape();
-	CVector2 cp = ci.Center;
-	RenderImage();
-	RenderMainDC();
-
-	CClientDC dc(this);
-
-	LOGBRUSH lbr;
-	lbr.lbStyle = BS_SOLID;
-	lbr.lbColor = RGB(255, 0, 0);
-	lbr.lbHatch = 0;
-
-	CPen DotPen(PS_GEOMETRIC | PS_SOLID, 3, &lbr, 0, 0);
-	CPen* OldPen = dc.SelectObject(&DotPen);
-
-	dc.MoveTo(cp.x - ci.fRadius, cp.y - ci.fRadius + YOFFSET);
-	dc.LineTo(cp.x + ci.fRadius, cp.y + ci.fRadius + YOFFSET);
-
-	dc.MoveTo(cp.x - ci.fRadius, cp.y + ci.fRadius + YOFFSET);
-	dc.LineTo(cp.x + ci.fRadius, cp.y - ci.fRadius + YOFFSET);
-
-	dc.SetTextColor(RGB(255, 0, 0));
-	dc.SetBkMode(TRANSPARENT);
-
-	CString strOutput;
-	strOutput.Format(_T("x:%f , y:%f"), cp.x, cp.y);
-	dc.TextOut(cp.x + ci.fRadius + 10, cp.y + ci.fRadius + YOFFSET - 25, strOutput);
-
-	dc.SelectObject(OldPen);
-	Invalidate(false);
-
-	strOutput.Format(_T("%d , %d"), (int)cp.x, (int)cp.y);
-	SetValueToControl(IDC_EDIT_LOADAXIS, strOutput);
-}
-
-void CSubProjectDlg::OnBnClickedButtonDraw()
-{
-	if (m_bDotMode)
-		return;
-
-	Initialize();
-	int nStartX = GetValueFromControl(IDC_EDIT_START_X);
-	int nStartY = GetValueFromControl(IDC_EDIT_START_Y);
-	m_nRandRadius = (rand() % 50) + 5;
-	DrawCircle(nStartX, nStartY, 0xff, m_nRandRadius);
-	RenderImage();
-	RenderMainDC();
-}
 
 void ActionThreadProcess(CWnd* pParent, const CVector2& StartP, const CVector2& EndP, int nRadius)
 {
@@ -542,47 +496,80 @@ void ActionThreadProcess(CWnd* pParent, const CVector2& StartP, const CVector2& 
 	pDialog->DrawCircle(StartV.y, StartV.x, 0xff, pDialog->m_nRandRadius);
 }
 
-void CSubProjectDlg::OnBnClickedButtonAction()
-{
-	if (m_bDotMode)
-		return;
-
-	CCircleInfo ci = CalcCenterPointOfShape();
-	CVector2 sp = ci.Center;
-	
-	int nEndX = GetValueFromControl(IDC_EDIT_END_X);
-	int nEndY = GetValueFromControl(IDC_EDIT_END_Y);
-	CVector2 ep(nEndX, nEndY);
-
-	std::thread Thread(ActionThreadProcess, this, sp, ep, ci.fRadius);
-	Thread.detach();
-
-	RenderImage();
-	RenderMainDC();
-}
 
 void CSubProjectDlg::OnMouseMove(UINT nFlags, CPoint point)
 {
 	CDialogEx::OnMouseMove(nFlags, point);
+	if (m_bRandomMovePlaying)
+		return;
+
+
+	m_MousePos = CVector2::CPointToVector2(point);
+	m_MousePos.y -= YOFFSET;
+
+	if (m_pClickedDot)
+	{
+		CVector2 PrevPos = m_pClickedDot->GetPos();
+		if (PrevPos != m_MousePos)
+		{
+			float fThickness = 2.0f;
+			DrawCircleFromDots(fThickness + 2.0f, 0x00);
+
+			m_pClickedDot->Draw(m_Image, m_nWidth, m_nHeight, 0x00);
+			m_pClickedDot->SetPos(m_MousePos);
+			m_pClickedDot->Draw(m_Image, m_nWidth, m_nHeight, 0xff);
+
+			DrawCircleFromDots(fThickness, 0xff);
+
+			for (int i = 0; i < m_Dots.size(); ++i)
+			{
+				if (m_Dots[i] != nullptr)
+					m_Dots[i]->Draw(m_Image, m_nWidth, m_nHeight, 0xff);
+			}
+
+			RenderImage();
+			RenderMainDC();
+		}
+
+	}
 }
 
 void CSubProjectDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
+	if (m_bRandomMovePlaying)
+		return;
+
 	m_MousePos = CVector2::CPointToVector2(point);
 	m_MousePos.y -= YOFFSET;
+
+	if (m_Dots.size() == 3)
+	{
+		for (int i = 0; i < m_Dots.size(); ++i)
+		{
+			if (m_Dots[i]->IsHovered(m_MousePos))
+			{
+				m_pClickedDot = m_Dots[i];
+				break;
+			}
+		}
+	}
 
 	CDialogEx::OnLButtonDown(nFlags, point);
 }
 
 void CSubProjectDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
-	if (!m_bDotMode)
+	if (m_bRandomMovePlaying)
 		return;
+	m_pClickedDot = nullptr;
 
-	float nThickness = 2.0f;
+	if (m_Image.IsNull())
+		Initialize();
+
+	float fThickness = 2.0f;
 	if (m_Dots.size() < 3)
 	{
-		AddDot(m_MousePos, CVector2(10, 10));
+		AddDot(m_MousePos, 10.0f);
 		for (int i = 0; i < m_Dots.size(); ++i)
 		{
 			if (m_Dots[i] != nullptr)
@@ -593,44 +580,66 @@ void CSubProjectDlg::OnLButtonUp(UINT nFlags, CPoint point)
 
 		if (m_Dots.size() == 3)
 		{
-			CCircleInfo info = DrawCircleFromDots(nThickness, 0xff);
+			DrawCircleFromDots(fThickness, 0xff);
 			RenderImage();
-
-			CString strOutput;
-			strOutput.Format(_T("Radius:%f"), info.fRadius);
-			m_BackBufDC.TextOut(info.Center.x + info.fRadius, info.Center.y + info.fRadius, strOutput);
 		}
-	}
-	else
-	{
-		DrawCircleFromDots(nThickness + 2, 0x00);
-		m_Dots.front()->Draw(m_Image, m_nWidth, m_nHeight, 0x00);
-		m_Dots.front()->SetPos(m_MousePos);
-		m_Dots.push_back(m_Dots.front());
-		m_Dots.erase(m_Dots.begin());
-		CCircleInfo info = DrawCircleFromDots(nThickness, 0xff);
-		RenderImage();
-
-		CString strOutput;
-		strOutput.Format(_T("Radius:%f"), info.fRadius);
-		m_BackBufDC.TextOut(info.Center.x + info.fRadius, info.Center.y + info.fRadius, strOutput);
 	}
 
 	CDialogEx::OnLButtonUp(nFlags, point);
 	RenderMainDC();
 }
 
-void CSubProjectDlg::OnBnClickedButtonThreedot()
+
+void CSubProjectDlg::OnBnClickedButtonClear()
 {
 	Initialize();
+	m_pClickedDot = nullptr;
+	for (int i = 0; i < m_Dots.size(); ++i)
+	{
+		if (m_Dots[i] != nullptr)
+			delete m_Dots[i];
+	}
+
+	m_Dots.clear();
+
 	RenderImage();
 	RenderMainDC();
-	m_bDotMode = !m_bDotMode;
+}
 
-	if (m_bDotMode)
-		SetValueToControl(IDC_BUTTON_THREEDOT, _T("세 점을 이용한 원 그리기 (활성화)"));
+void WorkThread(CWnd* pParent)
+{
+	CSubProjectDlg* pDialog = (CSubProjectDlg*)pParent;
+	pDialog->ClearDots();
+
+	float fThickness = 2.0f;
+	for (int i = 0; i < 10; ++i)
+	{
+		pDialog->ClearDots();
+		for (int j = 0; j < 3; ++j)
+		{
+			float fRandX = rand() % pDialog->m_nWidth;
+			float fRandY = rand() % pDialog->m_nHeight;
+			CVector2 Pos{ fRandX, fRandY };
+			CDot* pDot = pDialog->AddDot(Pos, 10.0f);
+
+			CImage* Image = pDialog->GetImage();
+			pDot->Draw(*Image, Image->GetWidth(), Image->GetHeight(), 0x00);
+		}
+
+		pDialog->DrawCircleFromDots(fThickness, 0xff);
+		pDialog->DrawDots(0xff);
+		pDialog->UpdateDisplayWithDelay(500);
+		pDialog->DrawCircleFromDots(fThickness, 0x00);
+	}
+	pDialog->m_bRandomMovePlaying = false;
+}
+
+void CSubProjectDlg::OnBnClickedButtonRandom()
+{
+	Initialize();
+	m_bRandomMovePlaying = true;
 	
-	else
-		SetValueToControl(IDC_BUTTON_THREEDOT, _T("세 점을 이용한 원 그리기 (비활성화)"));
+	std::thread Work(WorkThread, this);
+	Work.detach();
 
 }

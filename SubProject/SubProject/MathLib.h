@@ -14,6 +14,16 @@ struct CVector2
 		: x(0.0f), y(0.0f)
 	{}
 
+	bool operator==(const CVector2& other)
+	{
+		return (other.x == x) && (other.y == y);
+	}
+
+	bool operator!=(const CVector2& other)
+	{
+		return !(*this == other);
+	}
+
 	CVector2 operator/(float value)
 	{
 		return CVector2(x / value, y / value);
@@ -41,6 +51,11 @@ struct CVector2
 	CVector2 operator-(const CVector2& other) const
 	{
 		return CVector2(x - other.x, y - other.y);
+	}
+
+	float Length() const
+	{
+		return sqrt(x * x + y * y);
 	}
 
 	static CVector2 CPointToVector2(const CPoint& cp)
